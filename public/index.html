@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Drawing Board</title>
+    <meta name="description" content="An interactive HTML Canvas drawing application with color, brush size, clear, and save functionalities. Part of a larger web ecosystem.">
+    <link rel="icon" href="/assets/images/logo.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+    <!-- Preconnect to Google Fonts for better performance if using custom fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Example: Import a font like 'Roboto' or 'Open Sans' -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <header class="app-header">
+            <img src="/assets/images/logo.png" alt="Drawing Board Logo" class="app-logo">
+            <h1>Canvas Drawing Board</h1>
+            <p class="app-tagline">Unleash your creativity, one stroke at a time.</p>
+        </header>
+
+        <main class="drawing-area">
+            <aside class="toolbar">
+                <div class="tool-group">
+                    <h3>Colors</h3>
+                    <div class="color-picker-container">
+                        <input type="color" id="colorPicker" value="#000000" aria-label="Select drawing color">
+                        <div class="color-palette">
+                            <!-- Predefined colors, can be dynamically generated or fetched from a 'Dynamic Color Palette Generator' service -->
+                            <button class="palette-color active" data-color="#000000" style="background-color: #000000;" aria-label="Black color"></button>
+                            <button class="palette-color" data-color="#FF0000" style="background-color: #FF0000;" aria-label="Red color"></button>
+                            <button class="palette-color" data-color="#0000FF" style="background-color: #0000FF;" aria-label="Blue color"></button>
+                            <button class="palette-color" data-color="#008000" style="background-color: #008000;" aria-label="Green color"></button>
+                            <button class="palette-color" data-color="#FFFF00" style="background-color: #FFFF00;" aria-label="Yellow color"></button>
+                            <button class="palette-color" data-color="#800080" style="background-color: #800080;" aria-label="Purple color"></button>
+                            <button class="palette-color" data-color="#FFA500" style="background-color: #FFA500;" aria-label="Orange color"></button>
+                            <button class="palette-color" data-color="#FFFFFF" style="background-color: #FFFFFF;" aria-label="White color"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-group">
+                    <h3>Brush Size</h3>
+                    <input type="range" id="brushSize" min="1" max="50" value="5" aria-label="Adjust brush size">
+                    <span id="brushSizeValue" class="current-value">5px</span>
+                </div>
+
+                <div class="tool-group actions">
+                    <h3>Actions</h3>
+                    <button id="clearCanvas" class="action-button" aria-label="Clear the canvas">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                        Clear
+                    </button>
+                    <button id="saveCanvas" class="action-button" aria-label="Save your drawing">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                        Save
+                    </button>
+                </div>
+
+                <div class="tool-group integration-links">
+                    <h3>Explore More</h3>
+                    <ul>
+                        <li><a href="http://localhost:3001" target="_blank" rel="noopener noreferrer" aria-label="Visit Dynamic Color Palette Generator">Dynamic Color Palette Generator</a></li>
+                        <li><a href="http://localhost:3002" target="_blank" rel="noopener noreferrer" aria-label="Visit Live Markdown Editor">Live Markdown Editor</a></li>
+                        <li><a href="http://localhost:3003" target="_blank" rel="noopener noreferrer" aria-label="Visit Interactive Kanban Board">Interactive Kanban Board</a></li>
+                    </ul>
+                </div>
+            </aside>
+
+            <section class="canvas-container">
+                <canvas id="drawingCanvas" width="800" height="600" aria-label="Drawing canvas"></canvas>
+            </section>
+        </main>
+
+        <footer class="app-footer">
+            <p>&copy; <span id="currentYear"></span> Canvas Drawing Board. All rights reserved.</p>
+            <p>Built with <span role="img" aria-label="love">❤️</span> for the web.</p>
+        </footer>
+    </div>
+
+    <!-- Webpack will bundle and inject the main.js script here -->
+    <script src="main.bundle.js"></script>
+    <script>
+        // Dynamically update the current year in the footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
