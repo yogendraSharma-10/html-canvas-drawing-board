@@ -1,0 +1,396 @@
+:root {
+    --primary-color: #4a90e2; /* A nice blue */
+    --secondary-color: #f5a623; /* An accent orange */
+    --background-color: #f0f2f5; /* Light grey background */
+    --surface-color: #ffffff; /* White for cards/containers */
+    --text-color: #333333; /* Dark grey for text */
+    --border-color: #e0e0e0; /* Light grey for borders */
+    --shadow-color: rgba(0, 0, 0, 0.1); /* Subtle shadow */
+
+    --font-family-sans: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    --font-family-mono: 'Fira Code', 'Roboto Mono', monospace;
+
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+}
+
+/* Global Resets and Base Styles */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%; /* Prevent text resizing on orientation change */
+}
+
+body {
+    font-family: var(--font-family-sans);
+    color: var(--text-color);
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align to top, not center vertically */
+    min-height: 100vh;
+    padding: var(--spacing-md);
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* App Container */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px; /* Max width for the app */
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 4px 12px var(--shadow-color);
+    overflow: hidden; /* Ensure no overflow from rounded corners */
+}
+
+/* Header */
+.app-header {
+    background-color: var(--primary-color);
+    color: var(--surface-color);
+    padding: var(--spacing-md) var(--spacing-lg);
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.app-header h1 {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.app-header h1 img {
+    height: 1.8em; /* Adjust based on font size */
+    width: auto;
+    vertical-align: middle;
+}
+
+.app-header p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* Main Drawing Board Area */
+.drawing-board-container {
+    display: flex;
+    flex-direction: column; /* Stack toolbar and canvas on small screens */
+    flex-grow: 1;
+    padding: var(--spacing-lg);
+    gap: var(--spacing-lg);
+}
+
+@media (min-width: 768px) {
+    .drawing-board-container {
+        flex-direction: row; /* Side-by-side on larger screens */
+        align-items: flex-start; /* Align toolbar and canvas to top */
+    }
+}
+
+/* Toolbar */
+.toolbar {
+    flex-shrink: 0; /* Don't let toolbar shrink */
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+    display: flex;
+    flex-direction: row; /* Default to row for smaller screens */
+    flex-wrap: wrap; /* Allow items to wrap */
+    gap: var(--spacing-md);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    align-items: center; /* Center items vertically in row layout */
+    justify-content: center; /* Center items horizontally in row layout */
+}
+
+@media (min-width: 768px) {
+    .toolbar {
+        flex-direction: column; /* Stack items vertically on larger screens */
+        align-items: stretch; /* Stretch items to fill width */
+        justify-content: flex-start; /* Align items to the top */
+        width: 200px; /* Fixed width for toolbar on larger screens */
+    }
+}
+
+.tool-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: center; /* Center items in group */
+    width: auto; /* Allow width to be determined by content */
+}
+
+@media (min-width: 768px) {
+    .tool-group {
+        align-items: flex-start; /* Align items to the left */
+        width: 100%; /* Take full width of toolbar */
+    }
+}
+
+.tool-group label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+/* Color Picker */
+.color-picker-group input[type="color"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 48px;
+    height: 48px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+    border-radius: var(--border-radius-sm);
+    overflow: hidden; /* Hide default color input border */
+    box-shadow: inset 0 0 0 2px var(--border-color); /* Custom border */
+    transition: box-shadow 0.2s ease;
+}
+
+.color-picker-group input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+.color-picker-group input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: var(--border-radius-sm);
+}
+.color-picker-group input[type="color"]::-moz-color-swatch-wrapper {
+    padding: 0;
+}
+.color-picker-group input[type="color"]::-moz-color-swatch {
+    border: none;
+    border-radius: var(--border-radius-sm);
+}
+
+.color-picker-group input[type="color"]:hover {
+    box-shadow: inset 0 0 0 2px var(--primary-color);
+}
+
+/* Brush Size Slider */
+.brush-size-group input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 150px; /* Fixed width for slider */
+    height: 8px;
+    background: var(--border-color);
+    outline: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.brush-size-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    cursor: grab;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.brush-size-group input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    cursor: grab;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.brush-size-group input[type="range"]:hover::-webkit-slider-thumb,
+.brush-size-group input[type="range"]:active::-webkit-slider-thumb {
+    background: var(--secondary-color);
+    transform: scale(1.1);
+}
+
+.brush-size-group input[type="range"]:hover::-moz-range-thumb,
+.brush-size-group input[type="range"]:active::-moz-range-thumb {
+    background: var(--secondary-color);
+    transform: scale(1.1);
+}
+
+.brush-size-value {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    min-width: 20px; /* Ensure consistent width */
+    text-align: center;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    white-space: nowrap; /* Prevent text wrapping */
+    gap: var(--spacing-xs);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--surface-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+    background-color: #3a7bd5; /* Darker primary */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: var(--surface-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary:hover {
+    background-color: #d88e1e; /* Darker secondary */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-secondary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+.btn-outline:hover {
+    background-color: rgba(74, 144, 226, 0.1);
+    transform: translateY(-1px);
+}
+
+.btn-outline:active {
+    transform: translateY(0);
+}
+
+/* Canvas */
+#drawingCanvas {
+    flex-grow: 1; /* Allow canvas to take remaining space */
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    cursor: crosshair;
+    touch-action: none; /* Prevent default touch actions like scrolling/zooming */
+    box-shadow: 0 2px 8px var(--shadow-color);
+    /* Ensure canvas scales correctly within its container */
+    max-width: 100%;
+    height: auto;
+    display: block; /* Remove extra space below canvas */
+}
+
+/* Utility classes for icons (assuming a simple icon font or SVG setup) */
+.icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    /* Placeholder for actual icon styling */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767px) {
+    body {
+        padding: var(--spacing-sm);
+    }
+
+    .app-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .app-header p {
+        font-size: 0.8rem;
+    }
+
+    .drawing-board-container {
+        padding: var(--spacing-md);
+        gap: var(--spacing-md);
+    }
+
+    .toolbar {
+        padding: var(--spacing-sm);
+        gap: var(--spacing-sm);
+        flex-direction: row; /* Keep row for small screens */
+        justify-content: space-around; /* Distribute items */
+    }
+
+    .tool-group {
+        flex-basis: auto; /* Allow items to size naturally */
+        flex-grow: 1; /* Allow items to grow if space available */
+        min-width: 80px; /* Minimum width for tool groups */
+    }
+
+    .brush-size-group input[type="range"] {
+        width: 100px; /* Smaller width for slider on small screens */
+    }
+
+    .btn {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-header h1 {
+        font-size: 1.3rem;
+    }
+
+    .app-header h1 img {
+        height: 1.5em;
+    }
+
+    .toolbar {
+        flex-direction: column; /* Stack toolbar items on very small screens */
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .tool-group {
+        width: 100%;
+        align-items: center;
+    }
+
+    .brush-size-group input[type="range"] {
+        width: 100%;
+    }
+}
